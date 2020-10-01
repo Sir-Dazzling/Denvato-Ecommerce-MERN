@@ -2,10 +2,12 @@
   "name": "denvato_ecommerce-mern-demo",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "module",
   "repository": "https://github.com/Sir-Dazzling/Denvato-Ecommerce-MERN.git",
   "author": "Sir-Dazzling <ottidan20@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1"
   },
   "scripts": {
@@ -14,7 +16,6 @@
     "client": "yarn start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  
   "devDependencies": {
     "concurrently": "^5.3.0",
     "nodemon": "^2.0.4"
