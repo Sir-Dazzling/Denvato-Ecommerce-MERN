@@ -1,0 +1,15 @@
+main
+{
+    min-height: 80vh;
+}
+
+h4
+{
+    padding: 1rem 0;
+}
+
+.rating span
+{
+    font-size: small;
+    margin: 0.1rem;
+}
