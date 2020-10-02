@@ -12,7 +12,15 @@ if (process.env.NODE_ENV === 'development')
     middlewares.push(logger);
 }
 
-const initialState = {};
+const cartItemsFromStorage = localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [];
+
+const initialState = 
+{
+    cart: 
+    {
+        cartItems: cartItemsFromStorage
+    }
+};
 
 export const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(...middlewares)));
 
