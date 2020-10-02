@@ -7,14 +7,19 @@
   "author": "Sir-Dazzling <ottidan20@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "^5.10.7"
   },
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
     "client": "yarn start --prefix frontend",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
