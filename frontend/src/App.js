@@ -9,6 +9,7 @@ import ProductScreen from './screens/ProductScreen';
 import CartScreen from './screens/CartScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 import './index.css';
 
@@ -24,6 +25,7 @@ function App()
             <Route exact path = "/" component = {HomeScreen} />
             <Route path = "/product/:id" component = {ProductScreen} />
             <Route path = "/cart/:id?" component = {CartScreen} />
+            <Route path = "/profile" component = {ProfileScreen} />
           </Container>
         </main>
       <Footer />
