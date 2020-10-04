@@ -1,11 +1,6 @@
 import {ADD_TO_CART, REMOVE_FROM_CART} from '../types';
 
-const initialState = 
-{
-    cartItems: []
-};
-
-export const cartReducer = (state = initialState, action) => 
+export const cartReducer = (state = {cartItems: []}, action) => 
 {
     const {type, payload} = action;
 
@@ -34,6 +29,7 @@ export const cartReducer = (state = initialState, action) =>
                 ...state,
                 cartItems: state.cartItems.filter(x => x.product !== action.payload)
             };
+
         default:
             return state;
     }

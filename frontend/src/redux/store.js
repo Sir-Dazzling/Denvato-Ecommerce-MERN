@@ -16,10 +16,13 @@ const cartItemsFromStorage = localStorage.getItem("cartItems") ? JSON.parse(loca
 
 const userInfoFromStorage = localStorage.getItem("userInfo") ? JSON.parse(localStorage.getItem("userInfo")) : null;
 
+const shippingAddressFromStorage = localStorage.getItem("shippingAddress") ? JSON.parse(localStorage.getItem("shippingAddress")) : {};
+
 const initialState = 
 {
     cart: {cartItems: cartItemsFromStorage},
-    userLogin: {userInfo: userInfoFromStorage}
+    userLogin: {userInfo: userInfoFromStorage},
+    shipping: {shippingAddress: shippingAddressFromStorage}
 };
 
 export const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(...middlewares)));
