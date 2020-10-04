@@ -29,7 +29,7 @@ const ProfileScreen = ({history}) =>
     useEffect(() => {
         if(!userInfo)
         {
-            history.push("/login");
+            history.push("/sign-in");
         } else 
         {
             if(!user.name)
