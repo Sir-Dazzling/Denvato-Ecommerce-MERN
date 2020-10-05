@@ -14,6 +14,28 @@ const PlaceOrderScreen = () => {
     const shippingAddressInfo = useSelector(state => state.shipping);
     const {shippingAddress, paymentMethod} = shippingAddressInfo;
 
+    const placeOrderHandler = (e) => 
+    {
+        e.preventDefault();
+    };
+
+    // Add decimals
+    const addDecimals = (num) => 
+    {
+        return (Math.round(num * 100) / 100).toFixed(2);
+    };
+
+    // Calculate prices
+    const itemsPrice = addDecimals(cartItems.reduce((acc, item) => acc + item.price * item.qty, 0));
+
+    // Shipping price
+    const shippingPrice = addDecimals(itemsPrice > 100 ? 0 : 100);
+
+    // Tax Price
+    const taxPrice = addDecimals(Number((0.15 * itemsPrice).toFixed(2)));
+
+    const totalPrice = (Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)).toFixed(2);
+
     return (
         <>
             <CheckoutSteps step1 step2 step3 step4 />
@@ -21,7 +43,7 @@ const PlaceOrderScreen = () => {
                 <Col md = {8}>
                     <ListGroup variant = "flush">
                         <ListGroup.Item>
-                            <h1>Shipping</h1>
+                            <h2>Shipping</h2>
                             <p>
                                 <strong>Address</strong>
                                 {shippingAddress.address}, {shippingAddress.city}, {shippingAddress.postalCode}, {shippingAddress.country}
@@ -52,6 +74,46 @@ const PlaceOrderScreen = () => {
                                         </ListGroup.Item>
                                     ))}
                                 </ListGroup>}
+                        </ListGroup.Item>
+                    </ListGroup>
+                </Col>
+                <Col md = {4}>
+                    <ListGroup variant = "flush">
+                        <ListGroup.Item>
+                            <h2>Order Summary</h2>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Items</Col>
+                                <Col>&#8358;{itemsPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <ListGroup variant = "flush">
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Shipping</Col>
+                                <Col>&#8358;{shippingPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <ListGroup variant = "flush">
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Tax</Col>
+                                <Col>&#8358;{taxPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                    </ListGroup>
+                    <ListGroup variant = "flush">
+                        <ListGroup.Item>
+                            <Row>
+                                <Col>Total</Col>
+                                <Col>&#8358;{totalPrice}</Col>
+                            </Row>
+                        </ListGroup.Item>
+                        <ListGroup.Item>
+                            <Button type = "button" className = "btn-block" disabled = {cartItems.length === 0} onClick = {placeOrderHandler}>Place Order</Button>
                         </ListGroup.Item>
                     </ListGroup>
                 </Col>
