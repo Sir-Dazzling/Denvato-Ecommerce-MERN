@@ -9,6 +9,8 @@ import {saveShippingAddress} from '../redux/shipping/shipping.actions';
 
 const ShippingScreen = ({history}) => 
 { 
+    const dispatch = useDispatch();
+
     const shippingAddressInfo = useSelector(state => state.shipping);
     const {shippingAddress} = shippingAddressInfo;
 
@@ -17,12 +19,9 @@ const ShippingScreen = ({history}) =>
     const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
     const [country, setCountry] = useState(shippingAddress.country);
 
-    const dispatch = useDispatch();
-
     const submitHandler = (e) => 
     {
         e.preventDefault();
-
         dispatch(saveShippingAddress({address, city, postalCode, country}));
         history.push("/payment");
     };
