@@ -34,7 +34,7 @@ const PlaceOrderScreen = ({history}) => {
 
     const totalPrice = (Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)).toFixed(2);
 
-    const orderCreated = useSelector(state => state.order);
+    const orderCreated = useSelector(state => state.createOrder);
     const {order, success, error}  = orderCreated;
 
     useEffect(() => {
