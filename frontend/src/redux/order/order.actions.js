@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, ORDER_DETAILS_RESET, CREATE_ORDER_RESET} from '../types';
+import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL} from '../types';
 
 // To create an order
 export const createOrder = (order) => async (dispatch, getState) => 
@@ -100,6 +100,40 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
     {
         dispatch({
             type: ORDER_PAY_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });    
+    }
+};
+
+// List user's orders
+export const listUserOrders = () => async (dispatch, getState) => 
+{
+    try 
+    {
+        dispatch({type: USER_ORDER_LIST_REQUEST});    
+
+        const {userLogin: {userInfo}} = getState();
+
+        const config = 
+        {
+            headers: 
+            {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const {data} = await axios.get("/api/orders/myorders", config);
+       
+
+        dispatch({
+            type: USER_ORDER_LIST_SUCCESS,
+            payload: data 
+        });
+
+    } catch (error) 
+    {
+        dispatch({
+            type: USER_ORDER_LIST_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         });    
     }

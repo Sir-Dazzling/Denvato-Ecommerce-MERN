@@ -7,7 +7,7 @@ import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
 
 import {createOrder} from '../redux/order/order.actions';
-import {CREATE_ORDER_RESET, ORDER_DETAILS_RESET} from '../redux/types';
+import {CREATE_ORDER_RESET} from '../redux/types';
 
 const PlaceOrderScreen = ({history}) => {
     const dispatch = useDispatch();
