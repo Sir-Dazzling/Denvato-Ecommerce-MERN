@@ -8,8 +8,6 @@ export const saveShippingAddress = (data) => (dispatch) =>
         payload: data
     });
 
-    console.log("Sihpping info is: "+data);
-
     localStorage.setItem("shippingAddress", JSON.stringify(data));
 };
 

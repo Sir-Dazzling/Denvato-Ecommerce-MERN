@@ -18,11 +18,14 @@ const userInfoFromStorage = localStorage.getItem("userInfo") ? JSON.parse(localS
 
 const shippingAddressFromStorage = localStorage.getItem("shippingAddress") ? JSON.parse(localStorage.getItem("shippingAddress")) : {};
 
+const paymentMethodFromStorage = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
+
 const initialState = 
 {
     cart: {cartItems: cartItemsFromStorage},
     userLogin: {userInfo: userInfoFromStorage},
-    shipping: {shippingAddress: shippingAddressFromStorage}
+    shipping: {shippingAddress: shippingAddressFromStorage},
+    paymentMethod: {paymentMethod: paymentMethodFromStorage}
 };
 
 export const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(...middlewares)));

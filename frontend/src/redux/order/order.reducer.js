@@ -1,4 +1,4 @@
-import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_RESET} from '../types';
+import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_RESET, CREATE_ORDER_RESET, ORDER_DETAILS_RESET} from '../types';
 
 export const createOrderReducer = (state = {}, action) => 
 {
@@ -21,6 +21,8 @@ export const createOrderReducer = (state = {}, action) =>
                 loading: false,
                 error: payload
             };
+        case CREATE_ORDER_RESET:
+            return {};
         default:
             return state;
     }
@@ -48,6 +50,8 @@ export const orderDetailsReducer = (state = {loading: true, orderItems: [], ship
                 loading: false,
                 error: payload
             };
+        case ORDER_DETAILS_RESET:
+            return {};
         default:
             return state;
     }

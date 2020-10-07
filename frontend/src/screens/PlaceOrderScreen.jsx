@@ -7,6 +7,7 @@ import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
 
 import {createOrder} from '../redux/order/order.actions';
+import {CREATE_ORDER_RESET, ORDER_DETAILS_RESET} from '../redux/types';
 
 const PlaceOrderScreen = ({history}) => {
     const dispatch = useDispatch();
@@ -15,7 +16,10 @@ const PlaceOrderScreen = ({history}) => {
     const {cartItems}  = cart;
 
     const shippingAddressInfo = useSelector(state => state.shipping);
-    const {shippingAddress, paymentMethod} = shippingAddressInfo;
+    const {shippingAddress} = shippingAddressInfo;
+
+    // Getting payment infor method from local storage
+    const paymentMethod = localStorage.getItem("paymentMethod") ? JSON.parse(localStorage.getItem("paymentMethod")) : null;
 
     // Add decimals
     const addDecimals = (num) => 
@@ -41,11 +45,12 @@ const PlaceOrderScreen = ({history}) => {
         if(success)
         {
             history.push(`/orders/${order._id}`);
+            dispatch({type: CREATE_ORDER_RESET});
         }
         // eslint-disable-next-line
     },[history, success]);
 
-    const placeOrderHandler = (e) => 
+    const placeOrderHandler = async (e) => 
     {
         e.preventDefault();
         dispatch(createOrder({
