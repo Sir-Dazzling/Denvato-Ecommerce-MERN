@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 
 import {productListReducer, productDetailsReducer} from './product/product.reducer';
 import {cartReducer} from './cart/cart.reducer';
-import {userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer} from './user/user.reducer';
+import {userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer} from './user/user.reducer';
 import {shippingReducer} from './shipping/shipping.reducer';
 import {createOrderReducer, orderDetailsReducer, orderPayReducer, userOrderListReducer} from './order/order.reducer';
 
@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
     userRegister: userRegisterReducer,
     userDetails: userDetailsReducer,
     userUpdateProfile: userUpdateProfileReducer,
+    userList: userListReducer,
     shipping: shippingReducer,
     createOrder: createOrderReducer,
     orderDetails: orderDetailsReducer,
