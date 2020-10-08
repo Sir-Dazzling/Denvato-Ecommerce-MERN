@@ -9,7 +9,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 
 import {getOrderById, payOrder} from '../redux/order/order.actions';
-import {ORDER_DETAILS_RESET, ORDER_PAY_RESET} from '../redux/types';
+import {ORDER_PAY_RESET} from '../redux/types';
 
 const OrderScreen = ({match}) => {
     const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const OrderScreen = ({match}) => {
                 setSdkReady(true);
             }
         }
-    },[dispatch, orderId, successPay, order, orderId]);
+    },[dispatch, orderId, successPay, order]);
 
     const successPaymentHandler = (paymentResult) => 
     {

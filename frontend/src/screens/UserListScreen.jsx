@@ -6,21 +6,38 @@ import {useDispatch, useSelector} from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
-import {listUsers} from '../redux/user/user.actions';
+import {listUsers, deleteUser} from '../redux/user/user.actions';
 
-const UserListScreen = () => {
+const UserListScreen = ({history}) => 
+{
     const dispatch = useDispatch();
 
     const userList =  useSelector(state => state.userList);
     const {loading, error, users} = userList;
 
+    const userLoggedIn =  useSelector(state => state.userLogin);
+    const {userInfo} = userLoggedIn;
+
+    const userDeleted =  useSelector(state => state.userDelete);
+    const {success: deleteSuccess} = userDeleted;
+
     useEffect(() => {
-        dispatch(listUsers());
-    }, [dispatch]);
+        if(userInfo && userInfo.isAdmin)
+        {
+            dispatch(listUsers());
+        } else 
+        {
+            history.push("/sign-in");
+        }
+        
+    }, [dispatch, history, deleteSuccess, userInfo]);
 
     const deleteHandler = (id) => 
     {
-        console.log("deleted");
+        if(window.confirm("Are you sure?"))
+        {
+            dispatch(deleteUser(id));
+        }
     };
 
     return (
@@ -49,7 +66,7 @@ const UserListScreen = () => {
                                     )}
                                 </td>
                                 <td>
-                                    <LinkContainer to = {`/user/${user._id}/edit`}>
+                                    <LinkContainer to = {`/admin/user/${user._id}/edit`}>
                                         <Button variant = "light" className = "btn-sm">
                                             <i className="fas fa-edit"></i>
                                         </Button>
