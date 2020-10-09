@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {Form, Button} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
+import axios from 'axios';
 
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -21,6 +22,8 @@ const ProductEditScreen = ({match, history}) =>
     const [category, setCategory] = useState("");
     const [countInStock, setCountInStock] = useState(0);
     const [description, setDescription] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const [uploadingError, setUploadingError] = useState();
     
     const dispatch = useDispatch();
 
@@ -53,6 +56,36 @@ const ProductEditScreen = ({match, history}) =>
         }
     }, [dispatch, history, productId, product, success]);
 
+    // Handling uplaoding image request to backend server
+    const imageUploadHandler = async(e) => 
+    {
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append("image", file);
+        setUploading(true);
+
+        try 
+        {
+            const config = 
+            {
+                headers: 
+                {
+                    "Content-Type": "multipart/form-data"
+                }
+            }    
+
+            const {data} = await axios.post("/api/upload", formData, config);
+
+            setImage(data);
+            setUploading(false);
+        } catch (error) 
+        {
+            console.error("Image error is "+error);
+            setUploading(false);
+            setUploadingError("Oops Something went wrong with your upload, try again and make sure its either a jpg, jpeg or png file");
+        }
+    };
+
     const submitHandler = (e) => 
     {
         e.preventDefault();
@@ -66,7 +99,6 @@ const ProductEditScreen = ({match, history}) =>
             description,
             countInStock
         }));
-        // window.location.reload();
     };
 
     return (
@@ -89,8 +121,11 @@ const ProductEditScreen = ({match, history}) =>
                         </Form.Group>   
                         <Form.Group controlId = "image">
                             <Form.Label>Image</Form.Label>
-                            <Form.Control required type = "text" placeholder = "Enter image url" value = {image} onChange = {(e) => setImage(e.target.value)} >
+                            <Form.Control className = "mb-3" required type = "text" placeholder = "Enter image url" value = {image} onChange = {(e) => setImage(e.target.value)} >
                             </Form.Control>
+                            {uploadingError && <Message variant = "danger">{uploadingError}</Message>}
+                            <Form.File id = "image-file" label = "Choose product image" custom onChange = {imageUploadHandler} />
+                            {uploading && <Loader />}
                         </Form.Group>
                         <Form.Group controlId = "brand">
                             <Form.Label>Brand</Form.Label>
