@@ -6,7 +6,7 @@ import {productListReducer, productDetailsReducer, productDeleteReducer, product
 import {cartReducer} from './cart/cart.reducer';
 import {userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer} from './user/user.reducer';
 import {shippingReducer} from './shipping/shipping.reducer';
-import {createOrderReducer, orderDetailsReducer, orderPayReducer, userOrderListReducer} from './order/order.reducer';
+import {createOrderReducer, orderDetailsReducer, orderPayReducer, orderDeliverReducer, userOrderListReducer, allUsersOrderListReducer} from './order/order.reducer';
 
 const persistConfig = 
 {
@@ -33,7 +33,9 @@ const rootReducer = combineReducers({
     createOrder: createOrderReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
-    userOrderList: userOrderListReducer
+    orderDeliver: orderDeliverReducer,
+    userOrderList: userOrderListReducer,
+    allUsersOrderList: allUsersOrderListReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

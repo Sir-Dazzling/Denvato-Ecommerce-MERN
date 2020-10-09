@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {Row, Col, ListGroup, Image, Card} from 'react-bootstrap';
+import {Row, Col, ListGroup, Image, Card, Button} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import {PayPalButton} from 'react-paypal-button-v2';
@@ -8,10 +8,11 @@ import {PayPalButton} from 'react-paypal-button-v2';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 
-import {getOrderById, payOrder} from '../redux/order/order.actions';
-import {ORDER_PAY_RESET} from '../redux/types';
+import {getOrderById, payOrder, deliverOrder} from '../redux/order/order.actions';
+import {ORDER_PAY_RESET, ORDER_DELIVER_RESET} from '../redux/types';
 
-const OrderScreen = ({match}) => {
+const OrderScreen = ({match, history}) => 
+{
     const dispatch = useDispatch();
 
     const orderId = match.params.id;
@@ -23,6 +24,12 @@ const OrderScreen = ({match}) => {
 
     const orderPay = useSelector(state => state.orderPay);
     const {loading: loadingPay, success: successPay}  = orderPay;
+
+    const orderDeliver = useSelector(state => state.orderDeliver);
+    const {loading: loadingDeliver, success: successDeliver}  = orderDeliver;
+
+    const userLoggedIn = useSelector(state => state.userLogin);
+    const {userInfo} = userLoggedIn;
     
     if(!loading)
     {
@@ -37,40 +44,52 @@ const OrderScreen = ({match}) => {
     }
     
     useEffect(() => {
-        const addPaypalScript = async () => 
+        if(!userInfo)
         {
-            const {data: clientId}  = await axios.get("/api/config/paypal");
-            const script = document.createElement("script");
-            script.type = "text/javascript";
-            script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-            script.async = true;
-            script.onload = () => 
+            history.push("/sign-in");
+        } else 
+        {
+            const addPaypalScript = async () => 
             {
-                setSdkReady(true);
+                const {data: clientId}  = await axios.get("/api/config/paypal");
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+                script.async = true;
+                script.onload = () => 
+                {
+                    setSdkReady(true);
+                };
+                document.body.appendChild(script);
             };
-            document.body.appendChild(script);
-        };
 
-        if(!order || successPay || orderId !== order._id)
-        {
-            dispatch({type: ORDER_PAY_RESET});
-            dispatch(getOrderById(orderId));
-        } else if(!order.isPaid)
-        {
-            if(!window.paypal)
+            if(!order || successPay || orderId !== order._id || successDeliver)
             {
-                addPaypalScript();
-            } else 
+                dispatch({type: ORDER_PAY_RESET});
+                dispatch({type: ORDER_DELIVER_RESET});
+                dispatch(getOrderById(orderId));
+            } else if(!order.isPaid)
             {
-                setSdkReady(true);
+                if(!window.paypal)
+                {
+                    addPaypalScript();
+                } else 
+                {
+                    setSdkReady(true);
+                }
             }
-        }
-    },[dispatch, orderId, successPay, order]);
+        }       
+    },[dispatch, orderId, successPay, successDeliver, order]);
 
     const successPaymentHandler = (paymentResult) => 
     {
         console.log(paymentResult);
         dispatch(payOrder(orderId, paymentResult));
+    };
+
+    const deliverHandler = () => 
+    {
+        dispatch(deliverOrder(order));
     };
 
     return loading ? <Loader /> : error ? <Message variant = "danger">{error}</Message> : <>
@@ -86,12 +105,12 @@ const OrderScreen = ({match}) => {
                             <strong>Address: </strong>
                             {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode}, {order.shippingAddress.country}
                         </p>
-                        {order.isDelivered ? <Message variant = "success">Paid on {order.deliveredAt}</Message> : <Message variant = "danger">Not Delivered</Message>}
+                        {order.isDelivered ? <Message variant = "success">Delivered on {order.deliveredAt.substring(0, 10)}</Message> : <Message variant = "danger">Not Delivered</Message>}
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <h2>Payment Method</h2>
                         <p><strong>Method: {order.paymentMethod}</strong></p>
-                        {order.isPaid ? <Message variant = "success">Paid on {order.paidAt}</Message> : <Message variant = "danger">Not Paid</Message>}
+                        {order.isPaid ? <Message variant = "success">Paid on {order.paidAt.substring(0, 10)}</Message> : <Message variant = "danger">Not Paid</Message>}
                     </ListGroup.Item>
                     <ListGroup.Item>
                         <h2>Order Items</h2>
@@ -157,8 +176,14 @@ const OrderScreen = ({match}) => {
                         <ListGroup.Item>
                             {loadingPay && <Loader />}
                             {!sdkReady ? <Loader /> : (
-                                <PayPalButton amount = {order.totalPrice} currency = {"NG"} onSuccess = {successPaymentHandler} />
+                                <PayPalButton amount = {order.totalPrice} onSuccess = {successPaymentHandler} />
                             )}
+                        </ListGroup.Item>
+                    )}
+                    {loadingDeliver && <Loader/>}
+                    {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                        <ListGroup.Item>
+                            <Button type = "button" className = "btn btn-block" onClick = {deliverHandler}>Mark as delivered</Button>
                         </ListGroup.Item>
                     )}
                 </ListGroup>

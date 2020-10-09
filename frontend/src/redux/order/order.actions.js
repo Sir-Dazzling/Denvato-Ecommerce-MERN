@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL} from '../types';
+import {CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, CREATE_ORDER_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS, ORDER_PAY_FAIL, USER_ORDER_LIST_REQUEST, USER_ORDER_LIST_SUCCESS, USER_ORDER_LIST_FAIL, ALL_USERS_ORDER_LIST_REQUEST, ALL_USERS_ORDER_LIST_SUCCESS, ALL_USERS_ORDER_LIST_FAIL, ORDER_DELIVER_REQUEST, ORDER_DELIVER_SUCCESS, ORDER_DELIVER_FAIL} from '../types';
 
 // To create an order
 export const createOrder = (order) => async (dispatch, getState) => 
@@ -105,6 +105,40 @@ export const payOrder = (orderId, paymentResult) => async (dispatch, getState) =
     }
 };
 
+// Settign new delivery status
+export const deliverOrder = (order) => async (dispatch, getState) => 
+{
+    try 
+    {
+        dispatch({type: ORDER_DELIVER_REQUEST});    
+
+        const {userLogin: {userInfo}} = getState();
+
+        const config = 
+        {
+            headers: 
+            {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const {data} = await axios.put(`/api/orders/${order._id}/deliver`, {},  config);
+       
+
+        dispatch({
+            type: ORDER_DELIVER_SUCCESS,
+            payload: data 
+        });
+
+    } catch (error) 
+    {
+        dispatch({
+            type: ORDER_DELIVER_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });    
+    }
+};
+
 // List user's orders
 export const listUserOrders = () => async (dispatch, getState) => 
 {
@@ -134,6 +168,39 @@ export const listUserOrders = () => async (dispatch, getState) =>
     {
         dispatch({
             type: USER_ORDER_LIST_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        });    
+    }
+};
+
+// List all user's orders
+export const listAllUserOrders = () => async (dispatch, getState) => 
+{
+    try 
+    {
+        dispatch({type: ALL_USERS_ORDER_LIST_REQUEST});    
+
+        const {userLogin: {userInfo}} = getState();
+
+        const config = 
+        {
+            headers: 
+            {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        };
+        
+        const {data} = await axios.get("/api/orders", config);
+       
+        dispatch({
+            type: ALL_USERS_ORDER_LIST_SUCCESS,
+            payload: data 
+        });
+
+    } catch (error) 
+    {
+        dispatch({
+            type: ALL_USERS_ORDER_LIST_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         });    
     }
