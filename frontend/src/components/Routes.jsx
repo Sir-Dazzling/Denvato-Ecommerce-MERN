@@ -14,8 +14,11 @@ import PlaceOrderScreen from '../screens/PlaceOrderScreen';
 import OrderScreen from '../screens/OrderScreen';
 import UserListScreen from '../screens/UserListScreen';
 import UserEditScreen from '../screens/UserEditScreen';
+import ProductListScreen from '../screens/ProductListScreen';
+import ProductEditScreen from '../screens/ProductEditScreen';
 
-const Routes = () => {
+const Routes = () => 
+{
     return (
         <Container>
             <Route path = "/sign-in" component = {LoginScreen} />
@@ -30,8 +33,10 @@ const Routes = () => {
             <Route path = "/orders/:id" component = {OrderScreen} />
             <Route path = "/admin/user-list" component = {UserListScreen} />
             <Route path = "/admin/user/:id/edit" component = {UserEditScreen} />
+            <Route path = "/admin/product-list" component = {ProductListScreen} />
+            <Route path = "/admin/product/:id/edit" component = {ProductEditScreen} />
         </Container>
-    )
+    );
 };
 
 export default Routes;
