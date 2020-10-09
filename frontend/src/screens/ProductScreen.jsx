@@ -6,6 +6,7 @@ import {Row, Col, Image, ListGroup, Card, Button, Form} from 'react-bootstrap';
 import Rating from '../components/Rating';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import Meta from '../components/Meta';
 
 import {fetchProductDetails, createProductReview} from '../redux/product/product.actions';
 import {PRODUCT_CREATE_REVIEW_RESET} from '../redux/types';
@@ -59,6 +60,7 @@ const ProductScreen = ({history, match}) =>
             <Link className = "btn btn-light my-3" to = "/">Go Back</Link>
             {loading ? <Loader /> : error ? <Message variant = "danger">{error}</Message> : (
                 <>
+                    <Meta title = {product.name} />
                     <Row>
                         <Col md = {6}>
                             <Image src = {product.image} alt = {product.name} fluid />
