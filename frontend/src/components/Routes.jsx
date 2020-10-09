@@ -25,6 +25,7 @@ const Routes = () =>
             <Route path = "/sign-in" component = {LoginScreen} />
             <Route path = "/register" component = {RegisterScreen} />
             <Route exact path = "/" component = {HomeScreen} />
+            <Route path = "/search/:keyword" component = {HomeScreen} />
             <Route path = "/product/:id" component = {ProductScreen} />
             <Route path = "/cart/:id?" component = {CartScreen} />
             <Route path = "/profile" component = {ProfileScreen} />

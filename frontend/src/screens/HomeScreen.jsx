@@ -8,8 +8,11 @@ import Loader from '../components/Loader';
 
 import {fetchProducts} from '../redux/product/product.actions';
 
-const HomeScreen = () =>
+const HomeScreen = ({match}) =>
 {
+    // Getting keyword to use to filter products
+    const keyword = match.params.keyword;
+
     const dispatch = useDispatch();
 
     const productList = useSelector(state => state.productList);
@@ -17,8 +20,8 @@ const HomeScreen = () =>
     const {loading, error, products} = productList;
 
     useEffect(() => {
-        dispatch(fetchProducts());
-    }, [dispatch]);
+        dispatch(fetchProducts(keyword));
+    }, [dispatch, keyword]);
 
 
     return (

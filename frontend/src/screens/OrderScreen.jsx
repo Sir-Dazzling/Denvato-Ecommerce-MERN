@@ -79,7 +79,7 @@ const OrderScreen = ({match, history}) =>
                 }
             }
         }       
-    },[dispatch, orderId, successPay, successDeliver, order]);
+    },[dispatch, orderId, successPay, successDeliver, order, history, userInfo]);
 
     const successPaymentHandler = (paymentResult) => 
     {
