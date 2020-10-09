@@ -34,7 +34,7 @@ const HomeScreen = ({match}) =>
     return (
         <>
             <Meta />
-            {/* `To only show product carousel when there si no search keyword inputed` */}
+            {/* `To only show product carousel when there is no search keyword inputed` */}
             {!keyword ? <ProductCarousel /> : <Link to = "/" className = "btn btn-light">Go Back</Link>}
             <h1>Latest Products</h1>
             { loading ? (
