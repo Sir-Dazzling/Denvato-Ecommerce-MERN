@@ -23,7 +23,8 @@
     "client": "yarn start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "data:destroy": "node backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn add --prefix frontend && yarn run build --prefix frontend"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
